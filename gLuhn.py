@@ -8,7 +8,6 @@ import sys
 import numpy
 import re
 import csv
-import os
 
 iins = {} 
 
@@ -77,7 +76,6 @@ def GenDigits(card_number):
 			PANasList[item]=STR_LIST[c-1]
 
 		tempPAN = "".join(PANasList)
-                iinDetail = ''
 		if LuhnChk(tempPAN):
                         iinDetail = KnownIinDetail(tempPAN)
 			print "[+] Valid PAN ",tempPAN, iinDetail
@@ -86,7 +84,6 @@ def GenDigits(card_number):
 	return "\nTotal valid PAN generated: " + str(TotalPANs)
 
 def ReadIinListFromCSV():
-   print os.path.realpath(__file__) 
    with open(sys.path[0] +  '/iin-user-contributions.csv', 'rb') as f:
        reader = csv.reader(f)
        for row in reader:
