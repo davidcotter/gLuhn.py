@@ -77,7 +77,7 @@ def GenDigits(card_number):
 
 		tempPAN = "".join(PANasList)
 		if LuhnChk(tempPAN):
-                        iinDetail = KnownIinDetail(tempPAN)
+			iinDetail = KnownIinDetail(tempPAN)
 			print "[+] Valid PAN ",tempPAN, iinDetail
 			TotalPANs = TotalPANs + 1			
 			
