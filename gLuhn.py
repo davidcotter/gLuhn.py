@@ -7,7 +7,10 @@
 import sys
 import numpy
 import re
+import csv
+import os
 
+iins = {} 
 
 def LuhnChk(card_number):
     if (IIN_Ranges(card_number)!=True):
@@ -36,6 +39,12 @@ def IIN_Ranges(card_number):
     return False
 	
     
+def KnownIinDetail(pan): 
+  for iin in iins.keys():
+    if pan.startswith(iin):
+       return iins[iin] 
+  return '' 
+
 
 def GenDigits(card_number):
     if card_number.count("?") > 0 and len(card_number) <= 16:
@@ -68,13 +77,22 @@ def GenDigits(card_number):
 			PANasList[item]=STR_LIST[c-1]
 
 		tempPAN = "".join(PANasList)
+                iinDetail = ''
 		if LuhnChk(tempPAN):
-			print "[+] Valid PAN ",tempPAN
+                        iinDetail = KnownIinDetail(tempPAN)
+			print "[+] Valid PAN ",tempPAN, iinDetail
 			TotalPANs = TotalPANs + 1			
 			
 	return "\nTotal valid PAN generated: " + str(TotalPANs)
 
+def ReadIinListFromCSV():
+   print os.path.realpath(__file__) 
+   with open(sys.path[0] +  '/iin-user-contributions.csv', 'rb') as f:
+       reader = csv.reader(f)
+       for row in reader:
+           iins[row[0]] = ",".join(row)
 
+ 
 #############################################################################################
 ## Main
 ##
@@ -91,6 +109,7 @@ if __name__ == "__main__":
         print "              will be generated.                                            " 
         exit(0);
 
+    ReadIinListFromCSV()
     if len(sys.argv[1]) <= 16 and sys.argv[1].isdigit():      ## Validate a PAN with Luhn
 	if LuhnChk(sys.argv[1]):
 		print "[+] Valid PAN ",LuhnChk(sys.argv[1])
